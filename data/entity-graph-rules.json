@@ -1,0 +1,58 @@
+{
+  "updated_at": "2026-03-22T10:00:00.000Z",
+  "whitelist": {
+    "entities": [
+      "hugo",
+      "lancedb",
+      "rag",
+      "知识图谱"
+    ],
+    "doc_entity_pairs": [
+      "map-design|实体图",
+      "lancedb-rag|embedding"
+    ]
+  },
+  "blacklist": {
+    "entities": [
+      "demo",
+      "example"
+    ],
+    "doc_entity_pairs": []
+  },
+  "manual": {
+    "nodes": [
+      {
+        "id": "guide:from-zero",
+        "title": "从零入门路线",
+        "label": "学习导览",
+        "url": "/chat/",
+        "summary": "用于演示公共导览图和学习路径入口。",
+        "tags": [
+          "导览",
+          "学习路径"
+        ],
+        "kind": "manual"
+      }
+    ],
+    "edges": [
+      {
+        "source": "guide:from-zero",
+        "target": "hugo-quickstart",
+        "kind": "manual_link",
+        "weight": 2
+      },
+      {
+        "source": "guide:from-zero",
+        "target": "fts5-search",
+        "kind": "manual_link",
+        "weight": 2
+      },
+      {
+        "source": "guide:from-zero",
+        "target": "lancedb-rag",
+        "kind": "manual_link",
+        "weight": 2
+      }
+    ]
+  }
+}

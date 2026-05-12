@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520">
+  <rect width="960" height="520" fill="#f1f5f9"/>
+  <text x="36" y="58" font-size="30" font-family="Arial, sans-serif" fill="#111827">实体图示意：文章 - 技术 - 概念</text>
+  <circle cx="180" cy="220" r="48" fill="#c7d2fe"/>
+  <text x="144" y="227" font-size="18" font-family="Arial, sans-serif" fill="#312e81">Hugo</text>
+  <circle cx="420" cy="170" r="48" fill="#bae6fd"/>
+  <text x="374" y="177" font-size="18" font-family="Arial, sans-serif" fill="#0c4a6e">LanceDB</text>
+  <circle cx="420" cy="310" r="52" fill="#bbf7d0"/>
+  <text x="365" y="317" font-size="18" font-family="Arial, sans-serif" fill="#14532d">Knowledge Map</text>
+  <circle cx="700" cy="240" r="52" fill="#fde68a"/>
+  <text x="657" y="247" font-size="18" font-family="Arial, sans-serif" fill="#854d0e">RAG Chat</text>
+  <line x1="228" y1="210" x2="372" y2="182" stroke="#475569" stroke-width="3"/>
+  <line x1="228" y1="230" x2="370" y2="295" stroke="#475569" stroke-width="3"/>
+  <line x1="468" y1="182" x2="648" y2="228" stroke="#475569" stroke-width="3"/>
+  <line x1="470" y1="304" x2="648" y2="252" stroke="#475569" stroke-width="3"/>
+</svg>

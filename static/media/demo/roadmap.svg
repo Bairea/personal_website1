@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="520" viewBox="0 0 960 520">
+  <rect width="960" height="520" fill="#f8fafc"/>
+  <text x="40" y="60" font-size="30" font-family="Arial, sans-serif" fill="#111827">发现系统学习路径</text>
+  <rect x="40" y="110" width="250" height="80" rx="10" fill="#dbeafe"/>
+  <text x="60" y="155" font-size="22" font-family="Arial, sans-serif" fill="#1e3a8a">Hugo 基础</text>
+  <rect x="360" y="110" width="250" height="80" rx="10" fill="#dcfce7"/>
+  <text x="380" y="155" font-size="22" font-family="Arial, sans-serif" fill="#166534">搜索与索引</text>
+  <rect x="680" y="110" width="240" height="80" rx="10" fill="#fef3c7"/>
+  <text x="700" y="155" font-size="22" font-family="Arial, sans-serif" fill="#92400e">地图与 Chat</text>
+  <line x1="290" y1="150" x2="360" y2="150" stroke="#64748b" stroke-width="4"/>
+  <line x1="610" y1="150" x2="680" y2="150" stroke="#64748b" stroke-width="4"/>
+</svg>

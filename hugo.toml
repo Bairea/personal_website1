@@ -1,0 +1,15 @@
+baseURL = "/"
+languageCode = "zh-CN"
+title = "个人网站"
+theme = "discovery-light"
+
+[params]
+description = "面向技术内容的 Hugo + LanceDB 个人站点，提供文章、搜索、知识地图与 RAG 智能问答。"
+keywords = ["hugo", "lancedb", "搜索", "知识地图", "智能问答", "seo"]
+
+[permalinks]
+posts = "/posts/:slug.html"
+
+[taxonomies]
+tag = "tags"
+series = "series"

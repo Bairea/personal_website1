@@ -1,0 +1,23 @@
+{
+  "name": "personal-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:frontend && npm run build:site && npm run build:artifacts",
+    "build:frontend": "tsc -p tsconfig.frontend.json",
+    "build:site": "hugo --cleanDestinationDir",
+    "build:artifacts": "node scripts/build-artifacts.js",
+    "typecheck:frontend": "tsc -p tsconfig.frontend.json --noEmit",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "hugo-bin": "^0.149.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@lancedb/lancedb": "^0.27.1",
+    "better-sqlite3": "^11.0.0",
+    "express": "^4.19.2",
+    "gray-matter": "^4.0.3"
+  }
+}

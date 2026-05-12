@@ -1,0 +1,17 @@
+- [x] spec.md 明确 Hugo + LanceDB 的一体化落地范围与 URL 一致性要求
+- [x] tasks.md 覆盖 Hugo 站点、页面迁移、构建链路、API、图床/统计、部署验证
+- [x] spec.md 覆盖阶段 2 能力：agent 元数据生成与 embedding 策略
+- [x] spec.md 覆盖阶段 3 能力：问题图/实体图（二选一）与纠错入口
+- [x] Hugo 构建产物可访问：文章页、列表页、标签/系列页、/search /map /chat
+- [x] /api/search 支持 lexical/vector/hybrid 且返回 why 字段
+- [x] /api/chat 返回 answer + citations；unfamiliar 返回 reading_path + temp_graph
+- [x] /api/chat 支持临时子图保存为公共导览图
+- [x] 知识地图至少包含内链图与标签共现图，支持预览与跳转
+- [x] 备份与重建文档可操作（从 Markdown 重建索引/图谱/向量）
+- [x] 已完成 Hugo 主题选型并给出选择理由（贴合技术内容与工具型入口）
+- [x] 新主题下首页/文章/标签/系列与 /search /map /chat 外观统一且导航清晰
+- [x] 主题替换后 URL 与 SEO 基线保持不变，搜索/地图/Chat 交互可用
+- [x] 地图支持拖拽、平移、缩放、重置视图等基础交互
+- [x] 地图支持悬浮高亮与选中聚焦（邻居突出、无关弱化）
+- [x] 关系面板与筛选控件可用（图类型/标签/边类型/权重）
+- [x] links/tags/entity/public 四类图谱在增强交互下均可用
