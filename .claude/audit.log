@@ -1,4 +1,0 @@
-2026-05-12T23:19:29 | Bash | cmd=rtk ls -la /Users/bairea/Documents/cs_proj/personal_website1
-2026-05-12T23:20:43 | Bash | cmd=git init
-2026-05-12T23:20:48 | mcp__plugin_github_github__get_me | —
-2026-05-12T23:22:09 | Write | path=/Users/bairea/Documents/cs_proj/personal_website1/.gitignore
