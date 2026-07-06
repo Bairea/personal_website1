@@ -10,7 +10,7 @@ slug: "hugo-quickstart"
 
 如果你刚接触这个项目，建议先读这篇，再进入搜索与图谱模块。
 
-![学习路径示意](/media/demo/roadmap.svg)
+![学习路径示意](/media/2026/03/hugo-quickstart-roadmap.svg)
 
 ## 你会得到什么
 - 可访问的首页、文章页、标签页、系列页

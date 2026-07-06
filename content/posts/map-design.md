@@ -10,7 +10,7 @@ slug: "map-design"
 
 地图不是只有一种：不同视角对应不同问题。
 
-![实体图示意](/media/demo/entity-map.svg)
+![实体图示意](/media/2026/03/map-design-entity.svg)
 
 ## 三种图的用途
 - 内链图：最可解释，适合追溯文章关系
