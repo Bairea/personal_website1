@@ -1,0 +1,190 @@
+/* ========================================
+   Custom styles for search & map pages
+   ======================================== */
+
+/* --- Pagefind UI theme --- */
+/* Pagefind CSS variables are overridden in layouts/partials/extend_head.html
+   via an inline <style> block AFTER pagefind-ui.css loads.
+   This ensures we win the cascade against Pagefind's built-in :root defaults. */
+
+:root {
+  --pagefind-ui-scale: 1;
+  --pagefind-ui-text: var(--primary);
+  --pagefind-ui-primary: var(--primary);
+  --pagefind-ui-background: var(--entry);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--tertiary);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--radius);
+  --pagefind-ui-image-border-radius: var(--radius);
+  --pagefind-ui-image-box-ratio: 40%;
+  --pagefind-ui-font: inherit;
+}
+
+/* --- Dark mode contrast fix --- */
+/* PaperMod dark defaults:
+     --primary   rgb(218,218,219) ≈ 6.9:1  (OK for large text, marginal for body)
+     --secondary rgb(155,156,157) ≈ 4.1:1  (FAILS AA)
+     --content   rgb(196,196,197) ≈ 5.8:1  (barely AA, fails AAA)
+     --tertiary  rgb(65,66,68)               (tag/filter bg — too dark, text on it invisible)
+   Fix: brighten secondary/content for readability; brighten tertiary so tags are legible;
+   brighten primary slightly so Pagefind excerpts (which inherit --pagefind-ui-text) are clear. */
+
+:root[data-theme="dark"] {
+  --primary: rgb(228, 228, 229);             /* ~8.5:1 — strong for titles, links, Pagefind text */
+  --secondary: rgb(175, 176, 177);           /* ~4.6:1 — passes AA for meta/breadcrumbs */
+  --content: rgb(210, 210, 211);             /* ~7.3:1 — passes AAA for body text */
+  --tertiary: rgb(88, 89, 91);               /* tag/filter bg — light enough for text on top */
+}
+
+.custom-search {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* --- Map page --- */
+
+.map-page {
+    width: 100%;
+}
+
+.map-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.map-controls label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--secondary);
+}
+
+.map-controls select,
+.map-controls input[type="range"] {
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--theme);
+    color: var(--primary);
+    font-size: 0.85rem;
+}
+
+.map-controls button {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--entry);
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.map-controls button:hover {
+    border-color: var(--secondary);
+}
+
+.map-body {
+    display: flex;
+    gap: 16px;
+    min-height: 70vh;
+}
+
+.graph-container {
+    flex: 1;
+    min-height: 60vh;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--entry);
+}
+
+.map-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 16px;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+.map-sidebar #title {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.map-sidebar .meta {
+    color: var(--secondary);
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+}
+
+.map-sidebar #summary {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.map-sidebar #out a {
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.map-sidebar #relations {
+    margin-top: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+}
+
+.pill {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    background: var(--tertiary);
+    color: var(--primary);
+}
+
+.node-quick {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 2px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.node-quick:hover {
+    background: var(--tertiary);
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 768px) {
+    .map-body {
+        flex-direction: column;
+    }
+
+    .map-sidebar {
+        width: 100%;
+        max-height: none;
+    }
+
+    .map-controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
