@@ -1,15 +1,54 @@
 baseURL = "/"
 languageCode = "zh-CN"
 title = "个人网站"
-theme = "discovery-light"
+theme = "PaperMod"
 
 [params]
-description = "面向技术内容的 Hugo + LanceDB 个人站点，提供文章、搜索、知识地图与 RAG 智能问答。"
-keywords = ["hugo", "lancedb", "搜索", "知识地图", "智能问答", "seo"]
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  description = "面向技术内容的个人站点，提供文章、搜索与知识地图。"
+  keywords = ["hugo", "pagefind", "搜索", "知识地图", "seo"]
+
+  [params.homeInfoParams]
+    Title = "个人网站 👋"
+    Content = "面向技术内容的个人站点，提供文章、搜索与知识地图。"
+
+  [params.assets]
+    disableFingerprinting = true
+
+[[menu.main]]
+  name = "首页"
+  url = "/"
+  weight = 1
+
+[[menu.main]]
+  name = "搜索"
+  url = "/search"
+  weight = 2
+
+[[menu.main]]
+  name = "地图"
+  url = "/map"
+  weight = 3
+
+[[menu.main]]
+  name = "归档"
+  url = "/archives"
+  weight = 4
 
 [permalinks]
-posts = "/posts/:slug.html"
+  posts = "/posts/:slug.html"
 
 [taxonomies]
-tag = "tags"
-series = "series"
+  tag = "tags"
+  series = "series"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  noClasses = false

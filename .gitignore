@@ -2,7 +2,8 @@
 .hugo_build.lock
 public/
 resources/
-themes/
+themes/*
+!themes/PaperMod
 
 # Node
 node_modules/
