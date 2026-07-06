@@ -1,9 +1,3 @@
-export function sendFeedback(payload: unknown): void {
-  try {
-    navigator.sendBeacon("/api/feedback", new Blob([JSON.stringify(payload)], { type: "application/json" }));
-  } catch {}
-}
-
 export function escapeHtml(value: unknown): string {
   return String(value ?? "")
     .replace(/&/g, "&amp;")

@@ -1,20 +1,10 @@
-import { byId, escapeHtml, sendFeedback } from "./common.js";
+import { byId, escapeHtml } from "./common.js";
 const svg = d3.select("#graph");
 const sideTitle = byId("title");
 const sideMeta = byId("meta");
 const sideSummary = byId("summary");
 const sideOut = byId("out");
 const sideRelations = byId("relations");
-const ruleMode = byId("ruleMode");
-const ruleAction = byId("ruleAction");
-const ruleEntity = byId("ruleEntity");
-const ruleDocId = byId("ruleDocId");
-const ruleNodeId = byId("ruleNodeId");
-const ruleNodeLabel = byId("ruleNodeLabel");
-const ruleEdgeSource = byId("ruleEdgeSource");
-const ruleEdgeTarget = byId("ruleEdgeTarget");
-const ruleStatus = byId("ruleStatus");
-const submitRule = byId("submitRule");
 const graphKind = byId("graphKind");
 const tagFilter = byId("tagFilter");
 const edgeTypeFilter = byId("edgeTypeFilter");
@@ -41,10 +31,6 @@ const LARGE_GRAPH_EDGE_LIMIT = 1800;
 const graphKindLabels = {
     links: "内容网络",
     tags: "主题网络",
-    entity: "实体网络",
-    public: "导览网络",
-    entity_map: "实体网络",
-    entity_map_subgraph: "实体网络"
 };
 function kindLabel(kind) {
     return graphKindLabels[kind] || kind || "网络";
@@ -56,10 +42,6 @@ function nodeColor(id) {
     const text = String(id || "");
     if (text.startsWith("tag:"))
         return "#2563eb";
-    if (text.startsWith("entity:"))
-        return "#ea580c";
-    if (text.startsWith("guide:") || text.startsWith("manual:"))
-        return "#059669";
     return "#0f172a";
 }
 async function loadGraph(kind) {
@@ -229,10 +211,6 @@ function updateSide(node) {
     sideSummary.textContent = String(node.summary || "");
     sideOut.innerHTML = node.url ? `<p><a href="${escapeHtml(node.url)}">打开文章</a></p>` : "";
     renderRelations(node);
-    if (String(node.id || "").startsWith("entity:"))
-        ruleEntity.value = String(node.id).slice("entity:".length);
-    if (String(node.id || "").startsWith("doc:"))
-        ruleDocId.value = String(node.id).slice("doc:".length);
 }
 function applyFocusState() {
     if (!nodeSelection || !linkSelection)
@@ -384,12 +362,10 @@ function render(data) {
         updateSide(datum);
         applyFocusState();
         centerOnNode(datum);
-        sendFeedback({ type: "graph_node_click", nodeId: datum.id, kind: filtered.kind, ts: Date.now() });
     });
     node.on("dblclick", (_event, datum) => {
         if (!datum.url)
             return;
-        sendFeedback({ type: "graph_node_open", nodeId: datum.id, url: datum.url, kind: filtered.kind, ts: Date.now() });
         location.href = datum.url;
     });
     node.on("mouseenter", (_event, datum) => {
@@ -411,70 +387,6 @@ function render(data) {
     }
     applyFocusState();
     sideMeta.textContent = `${kindLabel(filtered.kind || currentKind)} · 节点 ${renderedNodes.length} · 边 ${renderedLinks.length}`;
-}
-function refreshRuleFields() {
-    const mode = ruleMode.value;
-    const showEntity = mode === "whitelist" || mode === "blacklist";
-    const showNode = mode === "manual_node";
-    const showEdge = mode === "manual_edge";
-    ruleEntity.style.display = showEntity ? "" : "none";
-    ruleDocId.style.display = showEntity ? "" : "none";
-    ruleNodeId.style.display = showNode ? "" : "none";
-    ruleNodeLabel.style.display = showNode ? "" : "none";
-    ruleEdgeSource.style.display = showEdge ? "" : "none";
-    ruleEdgeTarget.style.display = showEdge ? "" : "none";
-}
-async function submitGraphRule() {
-    if (currentKind !== "entity_map_subgraph" && currentKind !== "entity_map" && currentKind !== "entity") {
-        ruleStatus.textContent = "请先切换到实体网络，再提交纠错";
-        return;
-    }
-    const mode = ruleMode.value;
-    const action = ruleAction.value;
-    const payload = { kind: "entity", mode, action };
-    if (mode === "whitelist" || mode === "blacklist") {
-        payload.entity = ruleEntity.value.trim();
-        payload.doc_id = ruleDocId.value.trim();
-        if (!payload.entity) {
-            ruleStatus.textContent = "实体词不能为空。";
-            return;
-        }
-    }
-    if (mode === "manual_node") {
-        const nodeId = ruleNodeId.value.trim() || (selectedNode && selectedNode.id ? String(selectedNode.id) : "");
-        const nodeLabel = ruleNodeLabel.value.trim() || (selectedNode && (selectedNode.title || selectedNode.label) ? String(selectedNode.title || selectedNode.label) : "");
-        if (!nodeId) {
-            ruleStatus.textContent = "人工节点 ID 不能为空。";
-            return;
-        }
-        payload.node = { id: nodeId, label: nodeLabel, kind: "manual" };
-    }
-    if (mode === "manual_edge") {
-        const source = ruleEdgeSource.value.trim();
-        const target = ruleEdgeTarget.value.trim();
-        if (!source || !target) {
-            ruleStatus.textContent = "人工边需要同时填写起点和终点。";
-            return;
-        }
-        payload.edge = { source, target, kind: "manual_edge", weight: 1 };
-    }
-    ruleStatus.textContent = "正在提交…";
-    const response = await fetch("/api/graph/rules", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-    const data = (await response.json());
-    if (!data.ok)
-        throw new Error(data.error || "提交失败");
-    sendFeedback({
-        type: "graph_rule_submit",
-        kind: "entity",
-        nodeId: selectedNode && selectedNode.id ? selectedNode.id : "",
-        q: JSON.stringify({ mode, action }),
-        ts: Date.now()
-    });
-    ruleStatus.textContent = "规则已保存。请执行 npm run build 后刷新实体关系图。";
 }
 async function main() {
     const showKind = async (kind) => {
@@ -500,11 +412,6 @@ async function main() {
             return;
         svg.transition().duration(240).call(zoomBehavior.transform, d3.zoomIdentity);
     };
-    ruleMode.onchange = refreshRuleFields;
-    submitRule.onclick = () => submitGraphRule().catch((error) => {
-        ruleStatus.textContent = String(error);
-    });
-    refreshRuleFields();
     renderRelations(null);
     await showKind(graphKind.value || "links");
 }

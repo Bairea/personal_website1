@@ -1,4 +1,4 @@
-import { byId, escapeHtml, sendFeedback } from "./common.js";
+import { byId, escapeHtml } from "./common.js";
 
 declare const d3: any;
 
@@ -36,16 +36,6 @@ const sideMeta = byId<HTMLElement>("meta");
 const sideSummary = byId<HTMLElement>("summary");
 const sideOut = byId<HTMLElement>("out");
 const sideRelations = byId<HTMLElement>("relations");
-const ruleMode = byId<HTMLSelectElement>("ruleMode");
-const ruleAction = byId<HTMLSelectElement>("ruleAction");
-const ruleEntity = byId<HTMLInputElement>("ruleEntity");
-const ruleDocId = byId<HTMLInputElement>("ruleDocId");
-const ruleNodeId = byId<HTMLInputElement>("ruleNodeId");
-const ruleNodeLabel = byId<HTMLInputElement>("ruleNodeLabel");
-const ruleEdgeSource = byId<HTMLInputElement>("ruleEdgeSource");
-const ruleEdgeTarget = byId<HTMLInputElement>("ruleEdgeTarget");
-const ruleStatus = byId<HTMLElement>("ruleStatus");
-const submitRule = byId<HTMLButtonElement>("submitRule");
 const graphKind = byId<HTMLSelectElement>("graphKind");
 const tagFilter = byId<HTMLSelectElement>("tagFilter");
 const edgeTypeFilter = byId<HTMLSelectElement>("edgeTypeFilter");
@@ -72,10 +62,6 @@ const LARGE_GRAPH_EDGE_LIMIT = 1800;
 const graphKindLabels: Record<string, string> = {
   links: "内容网络",
   tags: "主题网络",
-  entity: "实体网络",
-  public: "导览网络",
-  entity_map: "实体网络",
-  entity_map_subgraph: "实体网络"
 };
 
 function kindLabel(kind: string): string {
@@ -89,8 +75,6 @@ function endpointId(value: GraphNode | string): string {
 function nodeColor(id: string): string {
   const text = String(id || "");
   if (text.startsWith("tag:")) return "#2563eb";
-  if (text.startsWith("entity:")) return "#ea580c";
-  if (text.startsWith("guide:") || text.startsWith("manual:")) return "#059669";
   return "#0f172a";
 }
 
@@ -251,8 +235,6 @@ function updateSide(node: GraphNode | null): void {
   sideSummary.textContent = String(node.summary || "");
   sideOut.innerHTML = node.url ? `<p><a href="${escapeHtml(node.url)}">打开文章</a></p>` : "";
   renderRelations(node);
-  if (String(node.id || "").startsWith("entity:")) ruleEntity.value = String(node.id).slice("entity:".length);
-  if (String(node.id || "").startsWith("doc:")) ruleDocId.value = String(node.id).slice("doc:".length);
 }
 
 function applyFocusState(): void {
@@ -408,12 +390,10 @@ function render(data: GraphData): void {
     updateSide(datum);
     applyFocusState();
     centerOnNode(datum);
-    sendFeedback({ type: "graph_node_click", nodeId: datum.id, kind: filtered.kind, ts: Date.now() });
   });
 
   node.on("dblclick", (_event: any, datum: GraphNode) => {
     if (!datum.url) return;
-    sendFeedback({ type: "graph_node_open", nodeId: datum.id, url: datum.url, kind: filtered.kind, ts: Date.now() });
     location.href = datum.url;
   });
 
@@ -438,80 +418,6 @@ function render(data: GraphData): void {
   sideMeta.textContent = `${kindLabel(filtered.kind || currentKind)} · 节点 ${renderedNodes.length} · 边 ${renderedLinks.length}`;
 }
 
-function refreshRuleFields(): void {
-  const mode = ruleMode.value;
-  const showEntity = mode === "whitelist" || mode === "blacklist";
-  const showNode = mode === "manual_node";
-  const showEdge = mode === "manual_edge";
-  ruleEntity.style.display = showEntity ? "" : "none";
-  ruleDocId.style.display = showEntity ? "" : "none";
-  ruleNodeId.style.display = showNode ? "" : "none";
-  ruleNodeLabel.style.display = showNode ? "" : "none";
-  ruleEdgeSource.style.display = showEdge ? "" : "none";
-  ruleEdgeTarget.style.display = showEdge ? "" : "none";
-}
-
-async function submitGraphRule(): Promise<void> {
-  if (currentKind !== "entity_map_subgraph" && currentKind !== "entity_map" && currentKind !== "entity") {
-    ruleStatus.textContent = "请先切换到实体网络，再提交纠错";
-    return;
-  }
-  const mode = ruleMode.value;
-  const action = ruleAction.value;
-  const payload: {
-    kind: string;
-    mode: string;
-    action: string;
-    entity?: string;
-    doc_id?: string;
-    node?: { id: string; label: string; kind: string };
-    edge?: { source: string; target: string; kind: string; weight: number };
-  } = { kind: "entity", mode, action };
-  if (mode === "whitelist" || mode === "blacklist") {
-    payload.entity = ruleEntity.value.trim();
-    payload.doc_id = ruleDocId.value.trim();
-    if (!payload.entity) {
-      ruleStatus.textContent = "实体词不能为空。";
-      return;
-    }
-  }
-  if (mode === "manual_node") {
-    const nodeId = ruleNodeId.value.trim() || (selectedNode && selectedNode.id ? String(selectedNode.id) : "");
-    const nodeLabel = ruleNodeLabel.value.trim() || (selectedNode && (selectedNode.title || selectedNode.label) ? String(selectedNode.title || selectedNode.label) : "");
-    if (!nodeId) {
-      ruleStatus.textContent = "人工节点 ID 不能为空。";
-      return;
-    }
-    payload.node = { id: nodeId, label: nodeLabel, kind: "manual" };
-  }
-  if (mode === "manual_edge") {
-    const source = ruleEdgeSource.value.trim();
-    const target = ruleEdgeTarget.value.trim();
-    if (!source || !target) {
-      ruleStatus.textContent = "人工边需要同时填写起点和终点。";
-      return;
-    }
-    payload.edge = { source, target, kind: "manual_edge", weight: 1 };
-  }
-
-  ruleStatus.textContent = "正在提交…";
-  const response = await fetch("/api/graph/rules", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-  const data = (await response.json()) as { ok: boolean; error?: string };
-  if (!data.ok) throw new Error(data.error || "提交失败");
-  sendFeedback({
-    type: "graph_rule_submit",
-    kind: "entity",
-    nodeId: selectedNode && selectedNode.id ? selectedNode.id : "",
-    q: JSON.stringify({ mode, action }),
-    ts: Date.now()
-  });
-  ruleStatus.textContent = "规则已保存。请执行 npm run build 后刷新实体关系图。";
-}
-
 async function main(): Promise<void> {
   const showKind = async (kind: string): Promise<void> => {
     graphKind.value = kind;
@@ -534,11 +440,6 @@ async function main(): Promise<void> {
     if (!zoomBehavior) return;
     svg.transition().duration(240).call(zoomBehavior.transform, d3.zoomIdentity);
   };
-  ruleMode.onchange = refreshRuleFields;
-  submitRule.onclick = () => submitGraphRule().catch((error: unknown) => {
-    ruleStatus.textContent = String(error);
-  });
-  refreshRuleFields();
   renderRelations(null);
   await showKind(graphKind.value || "links");
 }
