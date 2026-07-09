@@ -48,7 +48,9 @@ theme = "PaperMod"
   series = "series"
 
 [markup.goldmark.renderer]
-  unsafe = true
+  # 默认禁用原始 HTML 以防止 XSS。若需在 Markdown 中嵌入 <details> 等 HTML 标签，
+  # 可改为 true，但须确保所有内容均由作者手写，无用户提交内容。
+  unsafe = false
 
 [markup.highlight]
   noClasses = false
