@@ -51,7 +51,7 @@ function slugFromFilePath(fp) {
 }
 
 function urlFromSlug(slug) {
-  return `/posts/${slug}.html`;
+  return `/posts/${slug}/`;
 }
 
 function normalizeTags(tags) {

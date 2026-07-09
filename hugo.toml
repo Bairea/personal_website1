@@ -41,7 +41,7 @@ theme = "PaperMod"
   weight = 4
 
 [permalinks]
-  posts = "/posts/:slug.html"
+  posts = "/posts/:slug/"
 
 [taxonomies]
   tag = "tags"
