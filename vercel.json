@@ -28,7 +28,79 @@
       ]
     },
     {
-      "source": "/(.*\\.(css|js|json|woff2?|png|jpg|jpeg|gif|ico|svg|webp|wasm))",
+      "source": "/(.+).css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).js",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).woff2",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).woff",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).jpg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).jpeg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).gif",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).ico",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).svg",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).webp",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, immutable" }
+      ]
+    },
+    {
+      "source": "/(.+).wasm",
       "headers": [
         { "key": "Cache-Control", "value": "public, immutable" }
       ]
