@@ -1,10 +1,9 @@
 ---
 title: "知识地图设计：内链图、标签图、实体图"
 date: "2026-03-22"
+categories: ["技术"]
 tags: ["知识图谱", "地图", "实体图", "可视化"]
-series: ["知识地图实践"]
 summary: "对比三种地图视角，并说明如何通过纠错规则提升实体图质量。"
-keywords: ["links", "tags", "entity", "纠错"]
 slug: "map-design"
 ---
 

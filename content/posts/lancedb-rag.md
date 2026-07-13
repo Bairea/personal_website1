@@ -1,10 +1,9 @@
 ---
 title: "LanceDB 向量检索与 RAG 入门"
 date: "2026-03-22"
+categories: ["技术"]
 tags: ["向量数据库", "lancedb", "rag", "chat"]
-series: ["搜索与推荐"]
 summary: "介绍本项目如何构建向量索引、生成引用证据，并在 Chat 中返回阅读顺序。"
-keywords: ["embedding", "citations", "unfamiliar"]
 slug: "lancedb-rag"
 ---
 
