@@ -52,12 +52,33 @@
   {{- partial "extend_post_content.html" . }}
 
   <footer class="post-footer">
+    {{- if .Params.categories }}
+    <ul class="post-tags">
+      {{- range .Params.categories }}
+      <li><a href="/categories/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
     {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
     <ul class="post-tags">
       {{- range ($.GetTerms $tags) }}
       <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>
+    {{- if .Params.projects }}
+    <ul class="post-tags">
+      {{- range .Params.projects }}
+      <li><a href="/projects/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+    {{- if .Params.columns }}
+    <ul class="post-tags">
+      {{- range .Params.columns }}
+      <li><a href="/columns/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
     {{- if (.Param "ShowPostNavLinks") }}
     {{- partial "post_nav_links.html" . }}
     {{- end }}
