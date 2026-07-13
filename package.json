@@ -3,10 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run build:frontend && npm run build:site && npm run build:artifacts && npm run build:search",
+    "build": "npm run build:frontend && npm run build:site && npm run build:search",
     "build:frontend": "tsc -p tsconfig.frontend.json",
     "build:site": "hugo --cleanDestinationDir",
-    "build:artifacts": "node scripts/build-artifacts.js",
     "build:search": "npx pagefind --site public --force-language zh",
     "typecheck:frontend": "tsc -p tsconfig.frontend.json --noEmit",
     "start": "node server/index.js"
@@ -17,7 +16,6 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "gray-matter": "^4.0.3",
     "pagefind": "^1.5.2"
   }
 }
