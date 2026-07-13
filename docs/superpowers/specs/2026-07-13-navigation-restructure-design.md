@@ -203,7 +203,7 @@ build:frontend → build:site → build:search
 | hugo-quickstart.md | `技术` | - | hugo, 部署, seo, 入门 | - |
 | fts5-search.md | `技术` | - | 搜索, sqlite, fts5, hugo | - |
 | lancedb-rag.md | `技术` | - | 向量数据库, lancedb, rag, chat | - |
-| map-design.md | `技术` | - | 知识图谱, 地图, 实体图, 可视化 | -可视化 | - |
+| map-design.md | `技术` | - | 知识图谱, 地图, 实体图, 可视化 | - |
 | feedback-iteration.md | `技术` | - | 反馈, 分析, 迭代, 运营 | - |
 
 所有现有文章 `series` 字段删除。
