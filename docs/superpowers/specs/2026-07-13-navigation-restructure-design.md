@@ -21,12 +21,14 @@
 
 ## Front matter 字段
 
+Hugo taxonomy 在 front matter 中使用 `[taxonomies]` 配置的**值**（复数形式）作为字段名。约定单选时使用只有一个元素的数组。
+
 | 字段 | 类型 | 必填 | 说明 |
 |---|---|---|---|
-| `category` | string | 是 | 文章所属分类，单选。如 `技术`、`生活`、`历史`、`健康` |
+| `categories` | string[] | 是 | 文章所属分类，约定单选。如 `["技术"]`、`["生活"]` |
 | `tags` | string[] | 否 | 细分标签，多选 |
-| `project` | string | 否 | 所属 GitHub 项目名，单选 |
-| `column` | string | 否 | 所属技术专栏名，单选 |
+| `projects` | string[] | 否 | 所属 GitHub 项目名，约定单选。如 `["personal-website"]` |
+| `columns` | string[] | 否 | 所属技术专栏名，约定单选。如 `["Hugo 搭建指南"]` |
 
 `series` 字段废弃，从 taxonomies 中移除。现有文章的 `series` 值删除。
 
@@ -197,14 +199,14 @@ build:frontend → build:site → build:search
 
 ## 现有文章迁移
 
-| 文件 | category | column | tags | project |
+| 文件 | categories | columns | tags | projects |
 |---|---|---|---|---|
-| hello.md | `技术` | - | discovery, mvp | - |
-| hugo-quickstart.md | `技术` | - | hugo, 部署, seo, 入门 | - |
-| fts5-search.md | `技术` | - | 搜索, sqlite, fts5, hugo | - |
-| lancedb-rag.md | `技术` | - | 向量数据库, lancedb, rag, chat | - |
-| map-design.md | `技术` | - | 知识图谱, 地图, 实体图, 可视化 | - |
-| feedback-iteration.md | `技术` | - | 反馈, 分析, 迭代, 运营 | - |
+| hello.md | `["技术"]` | - | discovery, mvp | - |
+| hugo-quickstart.md | `["技术"]` | - | hugo, 部署, seo, 入门 | - |
+| fts5-search.md | `["技术"]` | - | 搜索, sqlite, fts5, hugo | - |
+| lancedb-rag.md | `["技术"]` | - | 向量数据库, lancedb, rag, chat | - |
+| map-design.md | `["技术"]` | - | 知识图谱, 地图, 实体图, 可视化 | - |
+| feedback-iteration.md | `["技术"]` | - | 反馈, 分析, 迭代, 运营 | - |
 
 所有现有文章 `series` 字段删除。
 
