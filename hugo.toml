@@ -10,12 +10,12 @@ theme = "PaperMod"
   ShowPostNavLinks = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = true
-  description = "面向技术内容的个人站点，提供文章、搜索与知识地图。"
-  keywords = ["hugo", "pagefind", "搜索", "知识地图", "seo"]
+  description = "面向技术内容的个人站点，提供文章发布与分类浏览。"
+  keywords = ["hugo", "pagefind", "搜索", "分类", "标签"]
 
   [params.homeInfoParams]
-    Title = "个人网站 👋"
-    Content = "面向技术内容的个人站点，提供文章、搜索与知识地图。"
+    Title = "个人网站"
+    Content = "面向技术内容的个人站点，提供文章发布与分类浏览。"
 
   [params.assets]
     disableFingerprinting = true
@@ -26,30 +26,45 @@ theme = "PaperMod"
   weight = 1
 
 [[menu.main]]
-  name = "搜索"
-  url = "/search"
+  name = "时间线"
+  url = "/archives"
   weight = 2
 
 [[menu.main]]
-  name = "地图"
-  url = "/map"
+  name = "搜索"
+  url = "/search"
   weight = 3
 
 [[menu.main]]
-  name = "归档"
-  url = "/archives"
+  name = "分类"
+  url = "/categories/"
   weight = 4
+
+[[menu.main]]
+  name = "标签"
+  url = "/tags/"
+  weight = 5
+
+[[menu.main]]
+  name = "项目"
+  url = "/projects/"
+  weight = 6
+
+[[menu.main]]
+  name = "技术专栏"
+  url = "/columns/"
+  weight = 7
 
 [permalinks]
   posts = "/posts/:slug/"
 
 [taxonomies]
+  category = "categories"
   tag = "tags"
-  series = "series"
+  project = "projects"
+  column = "columns"
 
 [markup.goldmark.renderer]
-  # 默认禁用原始 HTML 以防止 XSS。若需在 Markdown 中嵌入 <details> 等 HTML 标签，
-  # 可改为 true，但须确保所有内容均由作者手写，无用户提交内容。
   unsafe = false
 
 [markup.highlight]
