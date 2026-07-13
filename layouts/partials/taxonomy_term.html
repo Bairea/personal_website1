@@ -1,0 +1,31 @@
+{{- /* taxonomy_term.html — generic taxonomy term detail page partial
+     Expects dict: "Page" .  "TaxonomyName" string (e.g. "分类") */ -}}
+
+{{- $p := .Page -}}
+{{- $taxonomyName := .TaxonomyName -}}
+
+<header class="page-header">
+    {{- partial "breadcrumbs.html" $p -}}
+    <h1>{{ $taxonomyName }}: {{ $p.Title }}</h1>
+</header>
+
+{{- $pages := $p.Pages -}}
+
+{{- range $pages -}}
+<article class="post-entry tag-entry">
+    <header class="entry-header">
+        <h2 class="entry-hint-parent">{{ .Title }}</h2>
+    </header>
+    {{- if (ne (.Param "hideSummary") true) -}}
+    <div class="entry-content">
+        <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+    </div>
+    {{- end -}}
+    {{- if not (.Param "hideMeta") -}}
+    <footer class="entry-footer">
+        {{- partial "post_meta.html" . -}}
+    </footer>
+    {{- end -}}
+    <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>
+</article>
+{{- end -}}

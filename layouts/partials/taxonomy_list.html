@@ -1,0 +1,44 @@
+{{- /* taxonomy_list.html — generic taxonomy list page partial
+     Expects dict: "Page" .  "TaxonomyName" string (e.g. "分类")  "Style" string ("cards" | "cloud") */ -}}
+
+{{- $p := .Page -}}
+{{- $style := .Style | default "cards" -}}
+
+<header class="page-header">
+    <h1>{{ $p.Title }}</h1>
+</header>
+
+{{- if eq $style "cloud" -}}
+<div class="tag-cloud" data-pagefind-ignore>
+    {{- range $key, $value := $p.Data.Terms.Alphabetical -}}
+    {{- $name := $value.Name -}}
+    {{- $count := $value.Count -}}
+    {{- with site.GetPage (printf "/%s/%s" $p.Type $name) -}}
+    {{- $min := 0.8 -}}
+    {{- $max := 2.0 -}}
+    {{- $maxCount := 1 -}}
+    {{- range $p.Data.Terms.ByCount -}}
+        {{- if gt .Count $maxCount -}}
+            {{- $maxCount = .Count -}}
+        {{- end -}}
+    {{- end -}}
+    {{- $ratio := 0 -}}
+    {{- if gt $maxCount 0 -}}
+        {{- $ratio = div (float $count) (float $maxCount) -}}
+    {{- end -}}
+    {{- $fontSize := add $min (mul (sub $max $min) $ratio) -}}
+    <a class="tag-cloud-item" href="{{ .Permalink }}" style="font-size: {{ printf "%.2f" $fontSize }}rem;">{{ .LinkTitle }}<sup>{{ $count }}</sup></a>
+    {{- end -}}
+    {{- end -}}
+</div>
+{{- else -}}
+<div class="taxonomy-cards" data-pagefind-ignore>
+    {{- range $key, $value := $p.Data.Terms.Alphabetical -}}
+    {{- $name := $value.Name -}}
+    {{- $count := $value.Count -}}
+    {{- with site.GetPage (printf "/%s/%s" $p.Type $name) -}}
+    <a class="taxonomy-card" href="{{ .Permalink }}">{{ .LinkTitle }}<span class="count">{{ $count }}</span></a>
+    {{- end -}}
+    {{- end -}}
+</div>
+{{- end -}}
