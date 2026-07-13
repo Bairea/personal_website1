@@ -1,5 +1,6 @@
 baseURL = "/"
 languageCode = "zh-CN"
+defaultContentLanguage = "zh"
 title = "个人网站"
 theme = "PaperMod"
 
