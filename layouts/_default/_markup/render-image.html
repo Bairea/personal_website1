@@ -1,0 +1,6 @@
+{{- $src := .Destination -}}
+{{- $parts := split .Destination "static/media/" -}}
+{{- if gt (len $parts) 1 -}}
+  {{- $src = printf "/media/%s" (index $parts 1) -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} />
