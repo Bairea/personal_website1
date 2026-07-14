@@ -8,7 +8,8 @@
     "build:site": "hugo --cleanDestinationDir",
     "build:search": "npx pagefind --site public --force-language zh",
     "typecheck:frontend": "tsc -p tsconfig.frontend.json --noEmit",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "dev": "hugo server --buildDrafts --bind 127.0.0.1"
   },
   "devDependencies": {
     "hugo-bin": "^0.149.2",
