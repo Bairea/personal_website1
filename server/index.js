@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import express from "express";
@@ -10,8 +9,8 @@ function makeRequestId() {
   return `req_${crypto.randomUUID().replace(/-/g, "")}`;
 }
 
-/** In-memory rate limiter — no dependencies, sufficient for a single-process low-resource server. */
-function rateLimit({ windowMs = 60_000, max = 30 } = {}) {
+/** In-memory rate limiter - anti-abuse baseline for a static-only, single-process server. */
+function rateLimit({ windowMs = 60_000, max = 120 } = {}) {
   const hits = new Map();
   setInterval(() => {
     const cutoff = Date.now() - windowMs;
@@ -22,7 +21,7 @@ function rateLimit({ windowMs = 60_000, max = 30 } = {}) {
 
   return (req, res, next) => {
     const ip = req.ip || req.socket.remoteAddress || "unknown";
-    const key = `${ip}`;
+    const key = ip;
     const now = Date.now();
     let entry = hits.get(key);
     if (!entry || entry.resetAt <= now) {
@@ -47,7 +46,8 @@ function rateLimit({ windowMs = 60_000, max = 30 } = {}) {
 
 const app = express();
 app.disable("x-powered-by");
-app.use(express.json({ limit: "64kb" }));
+// Security headers - keep in sync with deploy/snippets/security-headers.conf (Nginx layer).
+// Used here for `npm start` local preview where Nginx is not in front.
 app.use((req, res, next) => {
   res.locals.requestId = makeRequestId();
   res.setHeader("x-request-id", res.locals.requestId);
@@ -72,6 +72,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+app.use(rateLimit());
 app.use(express.static(PUBLIC_DIR, { extensions: ["html"] }));
 
 const port = process.env.PORT ? Number(process.env.PORT) : 8787;
