@@ -3,7 +3,7 @@ title: "Hello Discovery"
 date: "2026-03-21"
 categories: ["技术"]
 tags: ["discovery", "mvp"]
-summary: "用于验证关键词索引、内链图与标签图的最小示例文章。"
+description: "用于验证关键词索引、内链图与标签图的最小示例文章。"
 slug: "hello"
 ---
 

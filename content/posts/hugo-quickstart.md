@@ -3,7 +3,7 @@ title: "Hugo 快速搭建：从零到可发布"
 date: "2026-03-22"
 categories: ["技术"]
 tags: ["hugo", "部署", "seo", "入门"]
-summary: "用 Hugo 搭建个人站点的最短路径：目录结构、页面路由、SEO 基线与发布流程。"
+description: "用 Hugo 搭建个人站点的最短路径：目录结构、页面路由、SEO 基线与发布流程。"
 slug: "hugo-quickstart"
 ---
 

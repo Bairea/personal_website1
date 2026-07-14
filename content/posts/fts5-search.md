@@ -3,7 +3,7 @@ title: "SQLite FTS5 关键词搜索实战"
 date: "2026-03-22"
 categories: ["技术"]
 tags: ["搜索", "sqlite", "fts5", "hugo"]
-summary: "解释 lexical 搜索为何适合低配服务器，并展示字段命中与 why 解释。"
+description: "解释 lexical 搜索为何适合低配服务器，并展示字段命中与 why 解释。"
 slug: "fts5-search"
 ---
 

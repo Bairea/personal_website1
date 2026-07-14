@@ -3,7 +3,7 @@ title: "反馈驱动迭代：从日志到内容优化"
 date: "2026-03-22"
 categories: ["技术"]
 tags: ["反馈", "分析", "迭代", "运营"]
-summary: "展示如何通过搜索点击与 Chat 行为导出，驱动内容改版与导航优化。"
+description: "展示如何通过搜索点击与 Chat 行为导出，驱动内容改版与导航优化。"
 slug: "feedback-iteration"
 ---
 
