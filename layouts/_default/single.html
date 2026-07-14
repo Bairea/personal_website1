@@ -54,8 +54,8 @@
   <footer class="post-footer">
     {{- if .Params.categories }}
     <ul class="post-tags">
-      {{- range .Params.categories }}
-      <li><a href="/categories/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- range ($.GetTerms "categories") }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>
     {{- end }}
@@ -67,15 +67,15 @@
     </ul>
     {{- if .Params.projects }}
     <ul class="post-tags">
-      {{- range .Params.projects }}
-      <li><a href="/projects/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- range ($.GetTerms "projects") }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>
     {{- end }}
     {{- if .Params.columns }}
     <ul class="post-tags">
-      {{- range .Params.columns }}
-      <li><a href="/columns/{{ . | urlize }}/">{{ . }}</a></li>
+      {{- range ($.GetTerms "columns") }}
+      <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>
     {{- end }}
