@@ -94,14 +94,14 @@ content/posts/*.md  →  Hugo → public/（静态 HTML + taxonomy 页面）
 ### 关键目录
 
 - `content/posts/` — 文章源文件（数据源头）
-- `content/_index.md` — 首页内容
+- `content/_index.md` — 首页标记（首页可见内容来自 `hugo.toml` 的 `homeInfoParams`，编辑首页文案改后者）
 - `content/search.md` — 搜索页内容
 - `content/archives.md` — 时间线页内容
 - `static/media/` — 图片，按 `/<yyyy>/<mm>/<slug>-<desc>.<ext>` 组织，引用路径为 `/media/...`
 - `static/js/` — 编译后的前端 JS（来自 `frontend/src/`）
 - `public/` — Hugo 输出（gitignored，可完全重建）
 - `public/pagefind/` — Pagefind 搜索索引和 JS/WASM bundle（构建时生成）
-- `docs/` — 项目文档（USAGE.md、DEPLOY.md）
+- `docs/` — 项目文档（DEPLOY.md 部署指南、superpowers/ 设计文档与实施计划）
 - `docs/superpowers/specs/` — 设计文档（搜索迁移、图片存储策略等）
 - `docs/superpowers/plans/` — 实施计划
 - `deploy/` — 部署配置（Nginx 反代、systemd 服务）
@@ -123,19 +123,11 @@ content/posts/*.md  →  Hugo → public/（静态 HTML + taxonomy 页面）
 - `projects` — 项目数组（约定单选，关联 GitHub 项目，如 `["personal-website"]`）
 - `columns` — 技术专栏数组（约定单选，如 `["Hugo 搭建指南"]`）
 - `description` — 文章摘要（用于搜索结果描述）
-- `slug` — URL slug 覆盖（默认：相对于 `content/posts/` 的文件路径）
+- `slug` — URL slug 覆盖（省略时默认取标题，如标题 "My Post" -> `/posts/my-post/`；显式设置可缩短 URL）
 
 内部链接：使用相对 `.md` 路径，如 `[文字](./other.md)`。外部链接（`http://`、`https://`、`mailto:`）正常渲染。
 
 图片：放在 `static/media/<yyyy>/<mm>/`，文件名为 `<slug>-<描述>.<ext>`，Markdown 中以 `/media/<yyyy>/<mm>/<slug>-<描述>.<ext>` 引用。格式优先 SVG > WebP > PNG > JPG。
-
-## API 响应格式
-
-所有 API 响应遵循：
-```json
-{ "ok": true, "request_id": "req_...", ... }
-{ "ok": false, "request_id": "req_...", "error": "code", "detail": "..." }
-```
 
 ## 重要约定
 
