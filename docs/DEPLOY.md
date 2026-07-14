@@ -9,7 +9,7 @@
 ```
 
 - Nginx 处理 TLS 终结、安全头、静态文件和速率限制
-- Express 仅监听 loopback，只处理 `/api/` 请求
+- Express 仅监听 loopback，提供静态文件兜底与速率限制（120 次/分钟/IP）
 - systemd 管理进程，自动重启
 
 ## 1. 服务器基础设置
@@ -69,13 +69,15 @@ sudo nginx -t && sudo systemctl start nginx
 ### 3.1 上传代码
 
 ```bash
+# 初始化主题子模块（首次克隆或更新主题后执行）
+git submodule update --init --recursive
+
 # 在本地构建
 npm run build
 
-# 上传到服务器（如果是本机部署则直接复制）
+# 上传到服务器（本机部署则直接复制；主题作为 git submodule 单独复制以避免拷入 .git）
 sudo rsync -av --exclude='node_modules' --exclude='.git' --exclude='themes' \
   ./ /srv/personal-website/
-# 主题目录需要单独复制（gitignored）
 sudo cp -r themes/PaperMod /srv/personal-website/themes/
 ```
 
@@ -121,6 +123,11 @@ sudo systemctl status personal-website
 ### 4.1 创建配置
 
 ```bash
+# 安全头 snippet（nginx.conf 通过 include 引用，缺失则 Nginx 启动失败）
+sudo mkdir -p /etc/nginx/snippets
+sudo cp deploy/snippets/security-headers.conf /etc/nginx/snippets/
+
+# 站点配置
 sudo cp deploy/nginx-personal-website.conf /etc/nginx/sites-available/personal-website
 ```
 
@@ -195,11 +202,12 @@ curl -I https://your-domain.com
 curl -sI http://YOUR_SERVER_IP | grep -iE \
   'x-frame|x-content-type|referrer-policy|content-security|permissions-policy'
 
-# API 功能检查
-curl -s http://YOUR_SERVER_IP/api/graph?kind=links | python3 -c "import sys,json; d=json.load(sys.stdin); print(f'ok={d[\"ok\"]}')"
+# 静态内容检查（首页与搜索页应返回 200）
+curl -sI http://YOUR_SERVER_IP/ | head -1
+curl -sI http://YOUR_SERVER_IP/search/ | head -1
 
-# 速率限制检查（快速发送 35 次请求，应在 30 次后返回 429）
-for i in $(seq 1 35); do curl -s -o /dev/null -w "%{http_code} " http://YOUR_SERVER_IP/api/graph?kind=links; done
+# Express 速率限制检查（直连 loopback，快速发送 130 次，应在 120 次后返回 429）
+for i in $(seq 1 130); do curl -s -o /dev/null -w "%{http_code} " http://127.0.0.1:8787/; done
 
 # 进程自动重启
 MAIN_PID=$(sudo systemctl show personal-website --property=MainPID --value)
