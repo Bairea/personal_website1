@@ -46,23 +46,21 @@ public/                # 构建产物（可完全重建）
 
 **一次性设置：**
 
-1. 附件默认位置：Vault 文件夹 = `static/media`
-2. Wiki 链接：关闭（Hugo 不支持 `[[ ]]` 语法）
-3. 新链接格式：相对路径
-4. 安装插件：Templater、Dataview
-5. Templater 设置：
-   - User Scripts Folder = `_obsidian/scripts`
-   - Template Folder = `_obsidian/templates`
-6. 为 `newPost` 脚本绑定热键
+1. 设置 → 文件与链接：
+   - 附件默认位置：Vault 文件夹 = `static/media`
+   - 使用 `[[ ]]` Wiki 链接：关闭
+   - 新链接格式：相对路径
+2. 设置 → 核心插件 → 时间戳笔记生成器：启用
+   - 新建笔记存放位置：`content/posts/2026`（或其他年份）
+   - 时间戳格式：`YYYYMMDD-HHmm_`
+   - 模板文件位置：`_obsidian/templates/post`
 
 **写文流程：**
 
-1. 热键建文 → 生成 `content/posts/<年>/<时间戳>.md`
-2. 填写 front matter（title/date/categories/tags/description）
+1. 命令面板（Ctrl/Cmd+P）→ "创建时间戳笔记"
+2. 填写 front matter（title/categories/tags/description）
 3. 写正文，粘贴图片自动进 `static/media/`
 4. `npm run build` → 部署
-
-打开 `_obsidian/dashboard.md` 查看写作看板。
 
 ### 手动创建
 
@@ -89,7 +87,7 @@ description: "文章摘要"
 | `categories` | 否 | 分类（约定单选），如 `["技术"]`/`["生活"]` |
 | `tags` | 否 | 标签（可多选） |
 | `description` | 否 | 文章摘要（搜索结果描述） |
-| `slug` | 否 | URL slug；省略则用时间戳 |
+| `slug` | 否 | URL slug；省略则用文件名（时间戳） |
 
 **注意：**
 
