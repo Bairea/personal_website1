@@ -8,15 +8,18 @@
     "build:site": "hugo --cleanDestinationDir",
     "build:search": "npx pagefind --site public --force-language zh",
     "typecheck:frontend": "tsc -p tsconfig.frontend.json --noEmit",
-    "start": "node server/index.js",
+    "typecheck:server": "tsc -p tsconfig.server.json --noEmit",
+    "start": "tsx server/index.ts",
     "dev": "hugo server --buildDrafts --bind 127.0.0.1"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "hugo-bin": "^0.149.2",
     "typescript": "^5.9.2"
   },
   "dependencies": {
     "express": "^4.19.2",
-    "pagefind": "^1.5.2"
+    "pagefind": "^1.5.2",
+    "tsx": "^4.23.1"
   }
 }

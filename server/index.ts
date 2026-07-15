@@ -1,17 +1,17 @@
 import path from "node:path";
 import crypto from "node:crypto";
-import express from "express";
+import express, { type Request, type Response, type NextFunction } from "express";
 
 const ROOT = process.cwd();
 const PUBLIC_DIR = path.join(ROOT, "public");
 
-function makeRequestId() {
+function makeRequestId(): string {
   return `req_${crypto.randomUUID().replace(/-/g, "")}`;
 }
 
 /** In-memory rate limiter - anti-abuse baseline for a static-only, single-process server. */
-function rateLimit({ windowMs = 60_000, max = 120 } = {}) {
-  const hits = new Map();
+function rateLimit({ windowMs = 60_000, max = 120 }: { windowMs?: number; max?: number } = {}) {
+  const hits = new Map<string, { count: number; resetAt: number }>();
   setInterval(() => {
     const cutoff = Date.now() - windowMs;
     for (const [key, entry] of hits) {
@@ -19,7 +19,7 @@ function rateLimit({ windowMs = 60_000, max = 120 } = {}) {
     }
   }, windowMs).unref();
 
-  return (req, res, next) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.socket.remoteAddress || "unknown";
     const key = ip;
     const now = Date.now();
@@ -33,12 +33,13 @@ function rateLimit({ windowMs = 60_000, max = 120 } = {}) {
     res.setHeader("x-ratelimit-remaining", String(Math.max(0, max - entry.count)));
     if (entry.count > max) {
       res.setHeader("retry-after", String(Math.ceil((entry.resetAt - now) / 1000)));
-      return res.status(429).json({
+      res.status(429).json({
         ok: false,
         request_id: res.locals.requestId || "",
         error: "rate_limited",
         detail: "请求过于频繁，请稍后再试",
       });
+      return;
     }
     next();
   };
@@ -48,7 +49,7 @@ const app = express();
 app.disable("x-powered-by");
 // Security headers - keep in sync with deploy/snippets/security-headers.conf (Nginx layer).
 // Used here for `npm start` local preview where Nginx is not in front.
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.locals.requestId = makeRequestId();
   res.setHeader("x-request-id", res.locals.requestId);
   res.setHeader("x-content-type-options", "nosniff");
