@@ -12,7 +12,7 @@
 - **分类浏览**：Hugo 原生 taxonomy 系统，支持分类（categories）、标签（tags）、项目（projects）、技术专栏（columns）
 - **安全**：Express 仅监听 loopback，CSP/X-Frame-Options/Permissions-Policy 已配置，速率限制已启用（静态资源防滥用，120 次/分钟/IP），Hugo Goldmark `unsafe = false`
 - **部署**：已部署到服务器（Ubuntu 24.04, 175.178.87.181）。Nginx 反代 + systemd 服务已配置。HTTP 可用，HTTPS 待域名后配置。部署路径 `/srv/personal-website/`，Node 路径 `/usr/local/bin/node`
-- **图片**：按 `/<yyyy>/<mm>/<slug>-<desc>.<ext>` 组织，Git 管理，无图床
+- **图片**：图片统一放 `static/media/`（Obsidian 附件文件夹，扁平存放）。Obsidian 粘贴后正文写相对路径 `![](../../../static/media/x.png)`，由 `layouts/_default/_markup/render-image.html` 在构建时改写为 `/media/x.png`，作者无需手动改写。手动加的图用 `<时间戳>-<描述>.<ext>` 命名。历史按 `<年>/<月>/` 组织的旧图保留，其 `/media/<年>/<月>/...` 绝对路径由钩子放行。格式优先级 SVG > WebP > PNG > JPG。图片纳入 Git，不用 LFS。详见 `static/media/README.md` 与 `docs/superpowers/specs/2026-07-14-obsidian-authoring-design.md`。
 
 ## 构建与运行命令
 
@@ -97,7 +97,7 @@ content/posts/*.md  →  Hugo → public/（静态 HTML + taxonomy 页面）
 - `content/_index.md` — 首页标记（首页可见内容来自 `hugo.toml` 的 `homeInfoParams`，编辑首页文案改后者）
 - `content/search.md` — 搜索页内容
 - `content/archives.md` — 时间线页内容
-- `static/media/` — 图片，按 `/<yyyy>/<mm>/<slug>-<desc>.<ext>` 组织，引用路径为 `/media/...`
+- `static/media/` — 图片，扁平存放（Obsidian 附件文件夹），引用路径由渲染钩子改写
 - `static/js/` — 编译后的前端 JS（来自 `frontend/src/`）
 - `public/` — Hugo 输出（gitignored，可完全重建）
 - `public/pagefind/` — Pagefind 搜索索引和 JS/WASM bundle（构建时生成）
@@ -129,16 +129,37 @@ content/posts/*.md  →  Hugo → public/（静态 HTML + taxonomy 页面）
 
 图片：放在 `static/media/<yyyy>/<mm>/`，文件名为 `<slug>-<描述>.<ext>`，Markdown 中以 `/media/<yyyy>/<mm>/<slug>-<描述>.<ext>` 引用。格式优先 SVG > WebP > PNG > JPG。
 
+## Obsidian 写作流程
+
+仓库根即 Obsidian vault 根。用 Obsidian 编辑 `content/posts/` 下文章。
+
+### Obsidian 设置（一次性）
+
+- 附件默认位置：Vault 文件夹 = `static/media`。
+- 使用 `[[ ]]` Wiki 链接：关闭（Hugo Goldmark 不识别 `[[ ]]` 与 `![[ ]]`）。
+- 新链接格式：相对路径（Relative path to file）。
+- 文件树排除：`node_modules`、`public`、`themes`（**不排除** `static/`，需查看/管理 `static/media/`）。
+- Templater：User Scripts Folder = `_obsidian/scripts`，Template Folder = `_obsidian/templates`，为 `newPost` 绑定热键。
+- Dataview：看板见 `_obsidian/dashboard.md`。
+
+### 写文 -> 发文
+
+1. 热键建文（Templater `newPost` 生成 `content/posts/<年>/<时间戳>.md` + front matter 骨架）。
+2. 填 `title`/`date`/`categories`/`tags`/`description`（`slug` 可选，省略则 URL = `/posts/<时间戳>/`）。
+3. 写正文；粘贴图片自动进 `static/media/`，链接由 Obsidian 写好（构建时钩子改写）。
+4. 文章互链用相对路径：同年 `[文字](<时间戳>.md)`，跨年 `[文字](../<年>/<时间戳>.md)`，Hugo 原生解析。
+5. `npm run build`（Hugo + 钩子改写图片链接 + Pagefind 索引）-> 部署。
+
 ## 重要约定
 
 - **语言**：中文（zh-CN）。UI 字符串、错误消息和内容均为中文。Hugo `languageCode = "zh-CN"`。
 - **无自动生成内容**：所有元数据（description、tags、categories）来自 front matter。缺失时默认为空——不从正文推断。
 - **客户端搜索**：Pagefind 扫描 HTML 中的 `data-pagefind-body`/`data-pagefind-meta`/`data-pagefind-filter` 属性构建索引。中文 CJK 分词通过 `--force-language zh` 启用。
 - **Taxonomy 约定**：`categories`/`projects`/`columns` 约定单选（数组中只有一个元素），作者自律。Hugo taxonomy 本身支持多值。
-- **图片存储**：图片放 `static/media/`，按 `/<yyyy>/<mm>/<slug>-<desc>.<ext>` 组织。格式优先级：SVG > WebP > PNG > JPG。Markdown 中用绝对路径 `/media/...` 引用。图片纳入 Git，不使用图床或 Git LFS。详见 `static/media/README.md` 和 `docs/superpowers/specs/2026-07-06-image-storage-design.md`。
+- **图片存储**：图片统一放 `static/media/`（Obsidian 附件文件夹，扁平存放）。Obsidian 粘贴后正文写相对路径 `![](../../../static/media/x.png)`，由 `layouts/_default/_markup/render-image.html` 在构建时改写为 `/media/x.png`，作者无需手动改写。手动加的图用 `<时间戳>-<描述>.<ext>` 命名。历史按 `<年>/<月>/` 组织的旧图保留，其 `/media/<年>/<月>/...` 绝对路径由钩子放行。格式优先级 SVG > WebP > PNG > JPG。图片纳入 Git，不用 LFS。详见 `static/media/README.md` 与 `docs/superpowers/specs/2026-07-14-obsidian-authoring-design.md`。
 - **Pagefind CSS 覆盖**：`pagefind-ui.css` 内含 `:root` 默认值（`--pagefind-ui-text: #393939` 等），在 `stylesheet.css` 之后加载会覆盖主题变量。通过 `layouts/partials/extend_head.html` 中的内联 `<style>` 块（位于 pagefind-ui.css 之后）确保覆盖生效。修改 Pagefind 主题时须在此处同步。
 - **深色模式对比度**：PaperMod 深色模式默认的 `--secondary`/`--content` 偏暗，在 `assets/css/extended/extended.css` 中通过 `:root[data-theme="dark"]` 提亮。修改时须验证 WCAG AA 对比度。
-- **Hugo 模板覆盖**：`layouts/_default/single.html` 覆盖 PaperMod 的同名模板，添加 Pagefind 数据属性和 taxonomy 链接。修改时须保持与 PaperMod 结构同步。
+- **Hugo 模板覆盖**：`layouts/_default/single.html` 覆盖 PaperMod 的同名模板，添加 Pagefind 数据属性和 taxonomy 链接。修改时须保持与 PaperMod 结构同步。另：`layouts/_default/_markup/render-image.html` 覆盖图片渲染，把指向 `static/media/` 的相对图片链接改写为 `/media/...`，供 Obsidian 粘贴图片流程使用。
 - **Hugo 主题**：`PaperMod`（见 `hugo.toml`），以 git submodule 形式嵌入 `themes/PaperMod`（pin 在固定 commit，见 `.gitmodules`）。克隆或部署须先执行 `git submodule update --init --recursive`，否则 `hugo` 构建报 theme not found。自定义布局：搜索页（`discovery-search`）、taxonomy 列表页/详情页。
 - **Hugo Goldmark**：`unsafe = false`，禁止 Markdown 中嵌入原始 HTML。若需启用（如 `<details>` 标签），须确保所有内容为作者手写。
 - **Express 绑定**：仅监听 `127.0.0.1`，不直接暴露公网。部署时须配合 Nginx 反向代理（见 `deploy/` 目录）。
