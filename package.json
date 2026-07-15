@@ -1,25 +1,12 @@
 {
   "name": "personal-website",
   "private": true,
-  "type": "module",
   "scripts": {
-    "build": "npm run build:frontend && npm run build:site && npm run build:search",
-    "build:frontend": "tsc -p tsconfig.frontend.json",
-    "build:site": "hugo --cleanDestinationDir",
-    "build:search": "npx pagefind --site public --force-language zh",
-    "typecheck:frontend": "tsc -p tsconfig.frontend.json --noEmit",
-    "typecheck:server": "tsc -p tsconfig.server.json --noEmit",
-    "start": "tsx server/index.ts",
+    "build": "hugo --cleanDestinationDir && npx pagefind --site public --force-language zh",
     "dev": "hugo server --buildDrafts --bind 127.0.0.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
     "hugo-bin": "^0.149.2",
-    "typescript": "^5.9.2"
-  },
-  "dependencies": {
-    "express": "^4.19.2",
-    "pagefind": "^1.5.2",
-    "tsx": "^4.23.1"
+    "pagefind": "^1.5.2"
   }
 }
