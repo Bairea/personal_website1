@@ -2,5 +2,7 @@
 {{- $parts := split .Destination "static/media/" -}}
 {{- if gt (len $parts) 1 -}}
   {{- $src = printf "/media/%s" (index $parts 1) -}}
+{{- else if not (strings.HasPrefix .Destination "/") -}}
+  {{- $src = printf "/media/%s" .Destination -}}
 {{- end -}}
 <img src="{{ $src }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} />
