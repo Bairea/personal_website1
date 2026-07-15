@@ -39,3 +39,5 @@ build/
 # Temp files
 *.tmp
 vectors_tmp/
+
+.obsidian
