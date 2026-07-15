@@ -54,6 +54,7 @@ public/                # 构建产物（可完全重建）
    - 新建笔记存放位置：`content/posts/2026`（或其他年份）
    - 时间戳格式：`YYYYMMDD-HHmm_`
    - 模板文件位置：`_obsidian/templates/post`
+3. 安装社区插件 Dataview（用于写作看板）
 
 **写文流程：**
 
@@ -61,6 +62,8 @@ public/                # 构建产物（可完全重建）
 2. 填写 front matter（title/categories/tags/description）
 3. 写正文，粘贴图片自动进 `static/media/`
 4. `npm run build` → 部署
+
+打开 `_obsidian/dashboard.md` 查看写作看板。
 
 ### 手动创建
 
