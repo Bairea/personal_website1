@@ -64,6 +64,7 @@ public/                # 构建产物（可完全重建）
 4. `npm run build` → 部署
 
 打开 `_obsidian/dashboard.md` 查看写作看板。
+【注】pending的双链要先创建对应笔记再创建双链。
 
 ### 手动创建
 
